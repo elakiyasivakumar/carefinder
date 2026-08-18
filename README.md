@@ -135,8 +135,43 @@ Full numbers, including what failed: [docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## Demo
 
-Screenshots from a live run — real model output, real OpenStreetMap facilities,
-real retrieved prices: [demo/](demo/).
+![CareFinder result for a fever case in Manhattan, Kansas](demo/screenshots/02-urgent-care.png)
+
+*22F, high fever 103F, Manhattan KS. Three real clinics from OpenStreetMap, mapped,
+each priced for the labs the clinical model identified — $135–$350 at one, $275–$550
+at another 0.6 miles away. Four telehealth options below at $35–$99. Live output,
+captured with Playwright.*
+
+More cases, including where the system does badly: [demo/](demo/).
+
+## Running it
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env          # set GOOGLE_CLOUD_PROJECT and MEDGEMMA_ENDPOINT_ID
+gcloud auth application-default login
+
+pytest                        # 141 tests, no credentials needed
+python web/app.py             # http://localhost:8000
+python cli.py                 # terminal version
+```
+
+The test suite runs entirely offline — no endpoint, no keys, no network. Only a
+live triage needs a deployed MedGemma endpoint.
+
+## Repository
+
+| Path | |
+|---|---|
+| `triage.py` | Clinical logic: emergency gate, assessment. No cloud SDK, no env at import. |
+| `graph.py` | LangGraph orchestration with the bounded retry cycle |
+| `orchestrator.py` | Flash nodes: filter, price, telehealth, review |
+| `agents/contracts.py` | Pydantic contracts, also used as `response_schema` |
+| `services/overpass_service.py` | Facility discovery by proximity |
+| `services/gemini_client.py` | Structured, optionally search-grounded Flash calls |
+| `audit.py` | Independent hallucination checks over a result |
+| `web/` | Flask + Leaflet interface |
+| `run_cycle.py` | Full-pipeline evaluation harness |
 
 ## Status
 

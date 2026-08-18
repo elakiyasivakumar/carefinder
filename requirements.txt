@@ -1,0 +1,27 @@
+# Vertex AI for MedGemma 27B endpoint
+google-cloud-aiplatform>=1.38.0
+
+# Geocoding for facility search (OpenStreetMap, no API key needed)
+geopy>=2.4.0
+
+# HTTP requests for Perplexity API
+requests>=2.31.0
+
+# Data validation
+pydantic>=2.5.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Terminal UI
+rich>=13.0.0
+
+# Web UI
+flask>=3.0.0
+
+# Orchestration
+langgraph>=1.0.0
+google-genai>=1.0.0
+
+# Tests
+pytest>=8.0.0

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CareFinder — where to go, and what it costs</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root {
+    --ink:#12181f; --muted:#5b6875; --line:#dfe5ea; --bg:#f6f8fa;
+    --accent:#0b6b7a; --warn:#b45309; --danger:#b91c1c; --ok:#0f766e;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         color:var(--ink); background:var(--bg); }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:18px 20px; }
+  header h1 { margin:0; font-size:17px; letter-spacing:-.01em; }
+  header p { margin:3px 0 0; color:var(--muted); font-size:13px; }
+  .notice { background:#fff8e6; border-bottom:1px solid #f0dfae; color:#7a5b12;
+            padding:9px 20px; font-size:13px; }
+  .notice b { color:#5c4409; }
+  .wrap { max-width:1060px; margin:0 auto; padding:20px; display:grid;
+          grid-template-columns:340px 1fr; gap:20px; align-items:start; }
+  @media (max-width:840px){ .wrap { grid-template-columns:1fr; } }
+  .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:16px; }
+  label { display:block; font-size:12px; font-weight:600; color:var(--muted);
+          text-transform:uppercase; letter-spacing:.04em; margin:12px 0 5px; }
+  input,select,textarea { width:100%; padding:9px 10px; border:1px solid var(--line);
+          border-radius:7px; font:inherit; background:#fff; }
+  textarea { resize:vertical; min-height:76px; }
+  button { width:100%; margin-top:16px; padding:11px; border:0; border-radius:7px;
+           background:var(--accent); color:#fff; font:inherit; font-weight:600; cursor:pointer; }
+  button:disabled { opacity:.55; cursor:default; }
+  #map { height:300px; border-radius:10px; border:1px solid var(--line); margin-bottom:14px;
+         display:none; }
+  .banner { border-radius:10px; padding:14px 16px; margin-bottom:14px; }
+  .banner.emergency { background:#fee2e2; border:1px solid #fca5a5; color:var(--danger); }
+  .banner.caution { background:#fef3c7; border:1px solid #fcd34d; color:var(--warn); }
+  .level { display:inline-block; padding:3px 10px; border-radius:99px; background:#e6f2f4;
+           color:var(--accent); font-size:12px; font-weight:700; }
+  .opt { border:1px solid var(--line); border-radius:9px; padding:12px; margin-top:10px; }
+  .opt-top { display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+  .opt-name { font-weight:600; }
+  .price { font-weight:700; color:var(--ok); white-space:nowrap; }
+  .price.none { color:var(--muted); font-weight:500; font-size:13px; }
+  .meta { color:var(--muted); font-size:13px; margin-top:2px; }
+  .basis { color:var(--muted); font-size:12px; margin-top:6px; font-style:italic; }
+  h3 { font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted);
+       margin:20px 0 6px; }
+  ul { margin:6px 0; padding-left:18px; } li { margin:3px 0; }
+  .disclaimer { color:var(--muted); font-size:12px; margin-top:18px; padding-top:12px;
+                border-top:1px solid var(--line); }
+  .empty { color:var(--muted); font-size:14px; }
+  details { margin-top:14px; } summary { cursor:pointer; color:var(--muted); font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>CareFinder</h1>
+  <p>Where to go and what it costs — for people paying the list price.</p>
+</header>
+
+<div class="notice">
+  <b>This is not medical advice.</b> It is an informational tool and cannot diagnose you
+  or replace a clinician. If you think this is an emergency, call 911.
+</div>
+
+<div class="wrap">
+  <form class="card" id="form">
+    <label for="age">Age</label>
+    <input id="age" type="number" min="0" max="120" value="30" required>
+
+    <label for="gender">Gender</label>
+    <select id="gender"><option>Female</option><option>Male</option><option>Other</option></select>
+
+    <label for="symptoms">Symptoms</label>
+    <textarea id="symptoms" placeholder="e.g. sore throat and fever for 2 days" required></textarea>
+
+    <label for="zip">Zip code</label>
+    <input id="zip" inputmode="numeric" pattern="\d{5}" placeholder="66502" required>
+
+    <button id="go" type="submit">Find care</button>
+  </form>
+
+  <div>
+    <div id="map"></div>
+    <div class="card" id="out">
+      <p class="empty">Enter your details to see care options, distances and self-pay prices.</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let map, markers = [];
+
+function esc(s){ const d=document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }
+
+function showMap(options){
+  const el = $('map');
+  const pts = options.filter(o => o.latitude != null && o.longitude != null);
+  if (!pts.length){ el.style.display='none'; return; }
+  el.style.display='block';
+  if (!map){
+    map = L.map(el);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+  }
+  markers.forEach(m => map.removeLayer(m)); markers = [];
+  pts.forEach(o => {
+    const m = L.marker([o.latitude, o.longitude]).addTo(map)
+      .bindPopup(`<b>${esc(o.name)}</b><br>${esc(o.type)} · ${o.distance_miles} mi<br>${esc(o.cost || 'price not available')}`);
+    markers.push(m);
+  });
+  map.fitBounds(L.featureGroup(markers).getBounds().pad(0.25));
+  setTimeout(() => map.invalidateSize(), 60);
+}
+
+function render(r){
+  const out = $('out');
+  if (r.is_emergency){
+    $('map').style.display='none';
+    out.innerHTML = `<div class="banner emergency"><b>Call 911 now.</b><br>
+      This may be a medical emergency. Do not delay seeking care.</div>`;
+    return;
+  }
+  if (r.error){
+    $('map').style.display='none';
+    out.innerHTML = `<div class="banner ${r.seek_care ? 'caution' : 'emergency'}">${esc(r.error)}</div>`;
+    return;
+  }
+
+  const opts = r.facilities || [];
+  showMap(opts);
+
+  let html = `<span class="level">${esc(r.care_setting)}</span>`;
+  if (r.recommendation) html += `<p style="margin:10px 0 0"><b>${esc(r.recommendation)}</b></p>`;
+  if (r.reasoning) html += `<p class="meta">${esc(r.reasoning)}</p>`;
+
+  if (r.care_level === 1){
+    html += `<h3>No visit needed</h3><p class="empty">Rest and over-the-counter treatment.</p>`;
+  } else if (opts.length){
+    html += `<h3>Where to go</h3>`;
+    opts.forEach(o => {
+      const priced = o.cost ? `<span class="price">${esc(o.cost)}</span>`
+                            : `<span class="price none">price not available</span>`;
+      html += `<div class="opt"><div class="opt-top">
+                 <span class="opt-name">${esc(o.name)}</span>${priced}</div>
+               <div class="meta">${esc(o.type)} · ${o.distance_miles} mi${o.address ? ' · ' + esc(o.address) : ''}</div>
+               ${o.cost_basis ? `<div class="basis">${esc(o.cost_basis)}</div>` : ''}</div>`;
+    });
+  } else {
+    html += `<h3>Where to go</h3><p class="empty">No in-person facilities found nearby.
+             Online options below may be the better route.</p>`;
+  }
+
+  if ((r.online_providers || []).length){
+    html += `<h3>Online options</h3>`;
+    r.online_providers.forEach(t => {
+      html += `<div class="opt"><div class="opt-top">
+                 <span class="opt-name">${esc(t.name)}</span>
+                 <span class="price">${esc(t.estimated_cost)}</span></div>
+               ${t.why ? `<div class="basis">${esc(t.why)}</div>` : ''}</div>`;
+    });
+  }
+
+  if ((r.labs || []).length) html += `<h3>Labs likely needed</h3><ul>${r.labs.map(l=>`<li>${esc(l)}</li>`).join('')}</ul>`;
+  if ((r.interventions || []).length) html += `<h3>Likely treatment</h3><ul>${r.interventions.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
+
+  if ((r.review_notes || []).length){
+    html += `<details><summary>How this answer was checked (${r.review_notes.length})</summary>
+             <ul>${r.review_notes.map(n=>`<li>${esc(n)}</li>`).join('')}</ul></details>`;
+  }
+
+  html += `<p class="disclaimer">For informational purposes only. Not medical advice.
+           If you think this is an emergency, call 911.</p>`;
+  out.innerHTML = html;
+}
+
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('go').disabled = true; $('go').textContent = 'Checking…';
+  $('out').innerHTML = `<p class="empty">Assessing symptoms, finding places, pricing them…</p>`;
+  try {
+    const res = await fetch('/api/triage', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        age: $('age').value, gender: $('gender').value,
+        symptoms: $('symptoms').value, zip_code: $('zip').value
+      })
+    });
+    render(await res.json());
+  } catch (err) {
+    $('out').innerHTML = `<div class="banner emergency">Could not reach the server.</div>`;
+  } finally {
+    $('go').disabled = false; $('go').textContent = 'Find care';
+  }
+});
+</script>
+</body>
+</html>

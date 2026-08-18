@@ -1,0 +1,451 @@
+{
+  "description": "Medical Triage Evaluation Dataset - 20 test cases across 4 care levels",
+  "care_levels": [
+    "Home Care",
+    "Retail Clinic",
+    "Urgent Care",
+    "ER"
+  ],
+  "test_cases": [
+    {
+      "id": 1,
+      "category": "Home Care",
+      "input": {
+        "age": 25,
+        "gender": "female",
+        "symptoms": "Mild headache for a few hours, no fever, no vision changes",
+        "zip_code": "10001"
+      },
+      "expected": {
+        "care_level": "Home Care",
+        "visit_steps": [
+          "Rest in dark quiet room",
+          "OTC pain reliever (ibuprofen/acetaminophen)",
+          "Hydration",
+          "Monitor symptoms"
+        ]
+      },
+      "zip_label": "NYC Manhattan \u2014 dense urban"
+    },
+    {
+      "id": 2,
+      "category": "Home Care",
+      "input": {
+        "age": 30,
+        "gender": "male",
+        "symptoms": "Runny nose, mild cough, slight congestion, no fever",
+        "zip_code": "95134"
+      },
+      "expected": {
+        "care_level": "Home Care",
+        "visit_steps": [
+          "OTC decongestant",
+          "Rest",
+          "Fluids",
+          "Honey for cough"
+        ]
+      },
+      "zip_label": "San Jose CA \u2014 suburban tech"
+    },
+    {
+      "id": 3,
+      "category": "Home Care",
+      "input": {
+        "age": 28,
+        "gender": "female",
+        "symptoms": "Seasonal allergies, itchy watery eyes, sneezing",
+        "zip_code": "66502"
+      },
+      "expected": {
+        "care_level": "Home Care",
+        "visit_steps": [
+          "OTC antihistamine (Claritin/Zyrtec)",
+          "Avoid allergens",
+          "Saline nasal rinse"
+        ]
+      },
+      "zip_label": "Manhattan KS \u2014 small city"
+    },
+    {
+      "id": 4,
+      "category": "Home Care",
+      "input": {
+        "age": 22,
+        "gender": "male",
+        "symptoms": "Small paper cut on finger, minor bleeding stopped",
+        "zip_code": "59718"
+      },
+      "expected": {
+        "care_level": "Home Care",
+        "visit_steps": [
+          "Clean wound with soap and water",
+          "Apply antibiotic ointment",
+          "Bandage",
+          "Monitor for infection"
+        ]
+      },
+      "zip_label": "Bozeman MT \u2014 low density"
+    },
+    {
+      "id": 5,
+      "category": "Home Care",
+      "input": {
+        "age": 35,
+        "gender": "male",
+        "symptoms": "Mild muscle soreness after gym workout yesterday",
+        "zip_code": "89049"
+      },
+      "expected": {
+        "care_level": "Home Care",
+        "visit_steps": [
+          "Rest affected muscles",
+          "Ice if swelling",
+          "OTC anti-inflammatory",
+          "Gentle stretching"
+        ]
+      },
+      "zip_label": "Tonopah NV \u2014 rural, sparse"
+    },
+    {
+      "id": 6,
+      "category": "Retail Clinic",
+      "input": {
+        "age": 8,
+        "gender": "male",
+        "symptoms": "Pink eye with yellow discharge, started this morning",
+        "zip_code": "10001"
+      },
+      "expected": {
+        "care_level": "Retail Clinic",
+        "visit_steps": [
+          "Visual examination",
+          "Assess discharge type",
+          "Prescribe antibiotic eye drops",
+          "Hygiene instructions"
+        ]
+      },
+      "zip_label": "NYC Manhattan \u2014 dense urban"
+    },
+    {
+      "id": 7,
+      "category": "Retail Clinic",
+      "input": {
+        "age": 32,
+        "gender": "female",
+        "symptoms": "Painful urination, frequent urge to urinate, no fever",
+        "zip_code": "95134"
+      },
+      "expected": {
+        "care_level": "Retail Clinic",
+        "tests": [
+          "urinalysis",
+          "urine culture"
+        ],
+        "visit_steps": [
+          "Collect urine sample",
+          "Urinalysis dipstick test",
+          "Prescribe antibiotics if UTI confirmed",
+          "Recommend fluids"
+        ]
+      },
+      "zip_label": "San Jose CA \u2014 suburban tech"
+    },
+    {
+      "id": 8,
+      "category": "Retail Clinic",
+      "input": {
+        "age": 19,
+        "gender": "female",
+        "symptoms": "Sore throat for 2 days, white spots on tonsils, mild fever",
+        "zip_code": "66502"
+      },
+      "expected": {
+        "care_level": "Retail Clinic",
+        "tests": [
+          "rapid strep test",
+          "throat culture"
+        ],
+        "visit_steps": [
+          "Check temperature",
+          "Examine throat",
+          "Rapid strep test",
+          "Prescribe antibiotics if positive"
+        ]
+      },
+      "zip_label": "Manhattan KS \u2014 small city"
+    },
+    {
+      "id": 9,
+      "category": "Retail Clinic",
+      "input": {
+        "age": 5,
+        "gender": "male",
+        "symptoms": "Ear pain, tugging at ear, mild fever 100F",
+        "zip_code": "59718"
+      },
+      "expected": {
+        "care_level": "Retail Clinic",
+        "visit_steps": [
+          "Otoscope examination",
+          "Check for fluid/infection",
+          "Prescribe antibiotics if ear infection",
+          "Pain management"
+        ]
+      },
+      "zip_label": "Bozeman MT \u2014 low density"
+    },
+    {
+      "id": 10,
+      "category": "Retail Clinic",
+      "input": {
+        "age": 40,
+        "gender": "female",
+        "symptoms": "Skin rash on arms, red and itchy, spreading slowly",
+        "zip_code": "89049"
+      },
+      "expected": {
+        "care_level": "Retail Clinic",
+        "visit_steps": [
+          "Visual examination of rash",
+          "Assess for allergic reaction",
+          "Prescribe topical steroid or antihistamine",
+          "Identify potential triggers"
+        ]
+      },
+      "zip_label": "Tonopah NV \u2014 rural, sparse"
+    },
+    {
+      "id": 11,
+      "category": "Urgent Care",
+      "input": {
+        "age": 22,
+        "gender": "female",
+        "symptoms": "High fever 103F, severe body aches, extreme fatigue for 2 days",
+        "zip_code": "10001"
+      },
+      "expected": {
+        "care_level": "Urgent Care",
+        "tests": [
+          "rapid flu test",
+          "COVID test",
+          "CBC"
+        ],
+        "visit_steps": [
+          "Check vitals",
+          "Rapid flu/COVID test",
+          "IV fluids if dehydrated",
+          "Antivirals if flu positive"
+        ]
+      },
+      "zip_label": "NYC Manhattan \u2014 dense urban"
+    },
+    {
+      "id": 12,
+      "category": "Urgent Care",
+      "input": {
+        "age": 45,
+        "gender": "male",
+        "symptoms": "Deep cut on hand from kitchen knife, bleeding controlled with pressure",
+        "zip_code": "95134"
+      },
+      "expected": {
+        "care_level": "Urgent Care",
+        "visit_steps": [
+          "Clean wound thoroughly",
+          "Assess depth and nerve/tendon damage",
+          "Sutures or staples",
+          "Tetanus shot if needed"
+        ]
+      },
+      "zip_label": "San Jose CA \u2014 suburban tech"
+    },
+    {
+      "id": 13,
+      "category": "Urgent Care",
+      "input": {
+        "age": 28,
+        "gender": "male",
+        "symptoms": "Twisted ankle playing basketball, significant swelling, cannot bear weight",
+        "zip_code": "66502"
+      },
+      "expected": {
+        "care_level": "Urgent Care",
+        "tests": [
+          "X-ray"
+        ],
+        "visit_steps": [
+          "Physical examination",
+          "X-ray to rule out fracture",
+          "RICE protocol",
+          "Splint or boot if needed"
+        ]
+      },
+      "zip_label": "Manhattan KS \u2014 small city"
+    },
+    {
+      "id": 14,
+      "category": "Urgent Care",
+      "input": {
+        "age": 20,
+        "gender": "female",
+        "symptoms": "Vomiting for 12 hours, cannot keep any water down, feeling weak",
+        "zip_code": "59718"
+      },
+      "expected": {
+        "care_level": "Urgent Care",
+        "tests": [
+          "basic metabolic panel",
+          "electrolytes"
+        ],
+        "visit_steps": [
+          "Check vitals and hydration status",
+          "IV fluids",
+          "Anti-nausea medication",
+          "Lab work if severe"
+        ]
+      },
+      "zip_label": "Bozeman MT \u2014 low density"
+    },
+    {
+      "id": 15,
+      "category": "Urgent Care",
+      "input": {
+        "age": 38,
+        "gender": "female",
+        "symptoms": "Severe migraine for 24 hours, light sensitivity, nausea, OTC meds not helping",
+        "zip_code": "89049"
+      },
+      "expected": {
+        "care_level": "Urgent Care",
+        "visit_steps": [
+          "Dim lights, quiet room",
+          "IV fluids",
+          "Migraine cocktail injection (toradol, benadryl, reglan)",
+          "Rule out other causes"
+        ]
+      },
+      "zip_label": "Tonopah NV \u2014 rural, sparse"
+    },
+    {
+      "id": 16,
+      "category": "ER",
+      "input": {
+        "age": 55,
+        "gender": "male",
+        "symptoms": "Chest pain, shortness of breath, sweating, pain radiating to left arm",
+        "zip_code": "10001"
+      },
+      "expected": {
+        "care_level": "ER",
+        "tests": [
+          "EKG",
+          "troponin",
+          "chest X-ray"
+        ],
+        "visit_steps": [
+          "Immediate EKG",
+          "Cardiac enzymes (troponin)",
+          "Oxygen",
+          "Aspirin",
+          "Prepare for possible cath lab"
+        ]
+      },
+      "zip_label": "NYC Manhattan \u2014 dense urban"
+    },
+    {
+      "id": 17,
+      "category": "ER",
+      "input": {
+        "age": 65,
+        "gender": "female",
+        "symptoms": "Sudden face drooping on one side, arm weakness, slurred speech, started 30 min ago",
+        "zip_code": "95134"
+      },
+      "expected": {
+        "care_level": "ER",
+        "tests": [
+          "CT scan",
+          "MRI"
+        ],
+        "visit_steps": [
+          "Stroke protocol activation",
+          "CT scan immediately",
+          "Check onset time",
+          "tPA if within window"
+        ]
+      },
+      "zip_label": "San Jose CA \u2014 suburban tech"
+    },
+    {
+      "id": 18,
+      "category": "ER",
+      "input": {
+        "age": 12,
+        "gender": "male",
+        "symptoms": "Severe allergic reaction after eating peanuts, throat swelling, difficulty breathing, hives",
+        "zip_code": "66502"
+      },
+      "expected": {
+        "care_level": "ER",
+        "visit_steps": [
+          "Epinephrine injection immediately",
+          "IV steroids",
+          "Airway management",
+          "Monitor for biphasic reaction"
+        ]
+      },
+      "zip_label": "Manhattan KS \u2014 small city"
+    },
+    {
+      "id": 19,
+      "category": "ER",
+      "input": {
+        "age": 0,
+        "gender": "male",
+        "symptoms": "2 month old infant with fever 101F, irritable, not feeding well",
+        "zip_code": "59718"
+      },
+      "expected": {
+        "care_level": "ER",
+        "tests": [
+          "blood culture",
+          "urine culture",
+          "lumbar puncture",
+          "CBC"
+        ],
+        "visit_steps": [
+          "Full sepsis workup",
+          "Blood and urine cultures",
+          "Lumbar puncture",
+          "IV antibiotics immediately"
+        ]
+      },
+      "zip_label": "Bozeman MT \u2014 low density"
+    },
+    {
+      "id": 20,
+      "category": "ER",
+      "input": {
+        "age": 33,
+        "gender": "male",
+        "symptoms": "Deep laceration on leg from power tool, heavy bleeding that won't stop with pressure",
+        "zip_code": "89049"
+      },
+      "expected": {
+        "care_level": "ER",
+        "tests": [
+          "CBC",
+          "type and screen"
+        ],
+        "visit_steps": [
+          "Apply pressure and tourniquet if needed",
+          "IV access",
+          "Type and screen blood",
+          "Surgical repair",
+          "Possible transfusion"
+        ]
+      },
+      "zip_label": "Tonopah NV \u2014 rural, sparse"
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+[
+  {
+    "slug": "01-landing",
+    "title": "Landing page",
+    "note": "The standing 'not medical advice' notice is visible before any input.",
+    "fill": null,
+    "file": "01-landing.png",
+    "seconds": null,
+    "result_text": "Enter your details to see care options, distances and self-pay prices."
+  },
+  {
+    "slug": "02-urgent-care",
+    "title": "Urgent care \u2014 fever with systemic symptoms",
+    "note": "Three real clinics from OpenStreetMap, mapped, each with a self-pay band.",
+    "fill": {
+      "age": "22",
+      "gender": "Female",
+      "zip": "66502",
+      "symptoms": "High fever 103F, severe body aches, extreme fatigue for 2 days"
+    },
+    "file": "02-urgent-care.png",
+    "seconds": 55.0,
+    "result_text": "Urgent Care\n\nGo to Urgent Care for evaluation, testing for common viral infections, and symptomatic treatment.\n\nThe patient presents with acute onset of high fever, severe body aches, and extreme fatigue, suggestive of a systemic viral illness like influenza or COVID-19. While not a 911 emergency, the severity of symptoms warrants evaluation and potential testing/treatment beyond self-care.\n\nWHERE TO GO\nStormont Vail Manhattan Campus\n$275\u2013$550\nUrgent Care \u00b7 0.5 mi \u00b7 1325 Research Park Drive, Manhattan, KS, 66502\nThis figure covers the self-pay estimated cost for an urgent care evaluation, rapid influenza and COVID-19 testing, complete blood count (CBC), comprehensive metabolic panel (CMP), urinalysis, basic antipyretic/analgesic administration, oral hydration, and evaluation for antiviral therapy.\nCenterPointe Physicians\n$135\u2013$350\nWalk-in Clinic \u00b7 1.1 mi \u00b7 2331 Tuttle Creek Boulevard, Manhattan, KS, 66502\nThe estimated self-pay range covers an urgent or walk-in evaluation in the Manhattan, KS area, rapid flu and COVID-19 diagnostic testing, in-house lab panels (CBC, CMP, urinalysis), and clinical assessment for supportive treatments and antiviral prescriptions.\nK+STAT Urgent Care\n$"
+  },
+  {
+    "slug": "03-retail-clinic",
+    "title": "Routine complaint \u2014 pink eye",
+    "note": "Telehealth at $35-75 sits alongside in-person options.",
+    "fill": {
+      "age": "8",
+      "gender": "Male",
+      "zip": "10001",
+      "symptoms": "Pink eye with yellow discharge, started this morning"
+    },
+    "file": "03-retail-clinic.png",
+    "seconds": 68.7,
+    "result_text": "Urgent Care\n\nVisit an Urgent Care center for evaluation and potential treatment of conjunctivitis.\n\nAn 8-year-old male presents with acute onset pink eye characterized by yellow discharge. This presentation is concerning for bacterial conjunctivitis, although viral or allergic causes are also possible. A physical examination is needed to differentiate the cause and guide treatment.\n\nWHERE TO GO\nRyan/NENA Comprehensive Heath Service Center\n$20\u2013$150\nUrgent Care \u00b7 2 mi \u00b7 279 East 3rd Street, New York, 10009\nThis figure covers a standard walk-in or primary care medical visit at Ryan Health/NENA under their sliding-fee discount schedule for uninsured patients, including the provider exam as well as routine point-of-care laboratory tests, general X-rays, and EKGs ordered during the visit.\nPrompt-MD Urgent Care Center Of Hoboken\n$150\u2013$300\nUrgent Care \u00b7 2.3 mi \u00b7 309 1st Street, Hoboken, NJ, 07030\nThe self-pay rate at Prompt-MD Urgent Care Center of Hoboken is $150 for a basic walk-in office visit, ranging up to $300 or more if additional services such as lab testing, X-rays, or minor procedures are performed.\nColumbia Primary Care\n$150\u2013$250\nUrgent Care \u00b7 3.7 mi \u00b7 2702 Broadway, New York, N"
+  },
+  {
+    "slug": "04-emergency",
+    "title": "Emergency gate fires",
+    "note": "MedGemma's first pass stops the pipeline. No facility search, no pricing.",
+    "fill": {
+      "age": "55",
+      "gender": "Male",
+      "zip": "10001",
+      "symptoms": "Chest pain, shortness of breath, sweating, pain radiating to left arm"
+    },
+    "file": "04-emergency.png",
+    "seconds": 3.1,
+    "result_text": "Call 911 now.\nThis may be a medical emergency. Do not delay seeking care."
+  },
+  {
+    "slug": "05-rural",
+    "title": "Rural zip \u2014 genuinely sparse",
+    "note": "Tonopah NV has two clinics. The app says so rather than inventing more.",
+    "fill": {
+      "age": "40",
+      "gender": "Female",
+      "zip": "89049",
+      "symptoms": "Skin rash on arms, red and itchy, spreading since yesterday"
+    },
+    "file": "05-rural.png",
+    "seconds": 52.0,
+    "result_text": "Urgent Care\n\nVisit an Urgent Care center for evaluation and treatment of the rash.\n\nThe patient presents with an acute, spreading, itchy rash. While not life-threatening, it requires a physical examination to determine the cause and appropriate treatment, which often involves prescription medications or specific topical agents.\n\nWHERE TO GO\nTonopah Primary Care\n$110\u2013$280\nUrgent Care \u00b7 1.5 mi \u00b7 Tonopah Primary Care\nCovers a standard self-pay primary care or urgent care evaluation fee in Tonopah, NV, plus estimated out-of-pocket costs for generic topical corticosteroids and oral antihistamines.\nRenown Medical Group \u2013 Tonopah\n$125\u2013$250\nWalk-in Clinic \u00b7 2.1 mi \u00b7 825 South Main Street, Tonopah, 89049\nThis figure covers the self-pay cash price for a walk-in clinic evaluation visit along with basic treatment including topical corticosteroids and oral antihistamines.\nONLINE OPTIONS\nAmazon Health (Amazon Clinic)\n$35\u201375\nOffers budget-friendly video or message-based consultations ideal for visual rash evaluation and treatment.\nTeladoc\n$75\nProvides video visits where doctors can visually examine the rash, take a history, and send prescriptions.\nMDLive\n$82\nOffers 24/7 video consultations with d"
+  },
+  {
+    "slug": "06-home-care",
+    "title": "Home care \u2014 no visit needed",
+    "note": "Level 1 does no lookups at all, so nothing is searched or priced.",
+    "fill": {
+      "age": "30",
+      "gender": "Male",
+      "zip": "95134",
+      "symptoms": "Runny nose, mild cough, slight congestion, no fever"
+    },
+    "file": "06-home-care.png",
+    "seconds": 16.0,
+    "result_text": "Home Care\n\nThis patient can manage their symptoms at home with rest, hydration, and over-the-counter medications, as they do not require medical evaluation.\n\nThe patient presents with mild upper respiratory symptoms (runny nose, cough, congestion) without fever. These symptoms are consistent with a common cold or mild viral URI, which typically resolves with supportive care.\n\nNO VISIT NEEDED\n\nRest and over-the-counter treatment.\n\nONLINE OPTIONS\nAmazon Health (Amazon Clinic)\n$35\u201375\nOffers the lowest out-of-pocket cost for uninsured patients needing evaluation and management of mild cold and congestion symptoms.\nTeladoc\n$75\nProvides 24/7 video access to physicians who can quickly assess common viral respiratory symptoms and prescribe treatment.\nMDLive\n$82\nConnects patients with board-certified doctors for convenient virtual diagnosis and management of routine cough and cold presentations.\nDoctor on Demand\n$75\u201399\nOffers comprehensive video consultations to evaluate mild respiratory issues and recommend appropriate prescription or over-the-counter care.\n\nFor informational purposes only. Not medical advice. If you think this is an emergency, call 911."
+  }
+]

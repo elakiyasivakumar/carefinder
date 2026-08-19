@@ -144,20 +144,112 @@ captured with Playwright.*
 
 More cases, including where the system does badly: [demo/](demo/).
 
-## Running it
+## Design trade-offs
+
+Every row was a real fork, and several were built one way before being replaced.
+
+| Chose | Instead of | Why |
+|---|---|---|
+| **LangGraph** | LangChain | The review node sends work *back* to pricing. That is a cycle; chains are acyclic. |
+| **Pydantic + `response_schema`** | LangChain output parser | The parser asks for JSON and hopes. `response_schema` constrains generation at the API, so malformed output is impossible. |
+| **MedGemma 27B** | MedGemma 4B | Clinical reasoning quality. Costs ~54GB of VRAM against ~8GB, which rules out on-device. |
+| **Overpass** | Google Places | Free, no key, same OSM data as the map tiles. Costs opening hours and metadata. |
+| **Flash orchestrator** | Deterministic Python routing | OSM has no usable "urgent care" tag, so no rule separates a walk-in clinic from a chiropractor. |
+| **Flash + search grounding** | Perplexity | One provider, one fewer key, and grounding composes with `response_schema` so pricing returns a typed band. |
+
+Twelve iterations that were built and then replaced — including a local price
+table, synthetic facilities, a boolean emergency gate, and a facility search that
+returned Bronx clinics for San Jose ZIPs — are recorded in
+[docs/TRADEOFFS.md](docs/TRADEOFFS.md).
+
+Three of those bugs shared a shape: **they failed silently and none was findable
+offline.** Sampling parameters ignored by the serving container, an empty string
+returned for an un-templated prompt, and a schema field dropped because Gemini
+cannot express arbitrary-key objects. Each was caught only by running the real
+thing and noticing output that was plausible but empty.
+
+## Cost and compute
+
+Measured over one triage — 2 MedGemma calls, ~6 Flash calls.
+
+| | |
+|---|---|
+| Flash tokens | ~$0.003 |
+| **Search grounding ×3** | **~$0.105** |
+| Overpass + Nominatim | free |
+| **Marginal cost per query** | **~$0.11** |
+
+Grounding is **97%** of it. Token spend is rounding error, so the lever that
+matters is how many facilities get priced.
+
+MedGemma is not a per-query cost but a step function — the GPU node bills
+~$5–6/hour regardless of traffic, and ~29 minutes of every cold start is
+deployment. One query on a cold endpoint effectively costs $3–4; at steady load
+with vLLM batching it is ~$0.005. There is no middle.
+
+**Could it run on the edge?** The clinical model at 4B quantised is ~2.5GB and
+would run on a phone. The retrieval cannot — facility search and pricing need
+live network. The honest design is hybrid, split along the privacy boundary:
+inference on device so **symptoms never leave the phone**, retrieval in the cloud
+carrying only a ZIP and procedure names. Full analysis in
+[docs/TRADEOFFS.md](docs/TRADEOFFS.md).
+
+## How to run it
+
+**Prerequisites:** Python 3.11+, a GCP project with the Vertex AI API enabled and
+billing on.
 
 ```bash
+git clone https://github.com/elakiyasivakumar/carefinder.git
+cd carefinder
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env          # set GOOGLE_CLOUD_PROJECT and MEDGEMMA_ENDPOINT_ID
-gcloud auth application-default login
-
-pytest                        # 141 tests, no credentials needed
-python web/app.py             # http://localhost:8000
-python cli.py                 # terminal version
 ```
 
-The test suite runs entirely offline — no endpoint, no keys, no network. Only a
-live triage needs a deployed MedGemma endpoint.
+**1. Run the tests — needs nothing else.**
+
+```bash
+pytest          # 141 tests, no credentials, no endpoint, no network
+```
+
+**2. Authenticate.** Use your own login rather than a service-account key file.
+
+```bash
+gcloud auth application-default login
+cp .env.example .env        # set GOOGLE_CLOUD_PROJECT
+```
+
+**3. Deploy MedGemma.** This is the only step that costs money. Model Garden
+publishes several configurations; default quota usually allows only this one:
+
+```bash
+# medgemma@medgemma-27b-it on g4-standard-48 + 1x NVIDIA_RTX_PRO_6000
+# ~29 minutes, and the node bills throughout
+gcloud ai endpoints list --region=us-central1     # copy the id into .env
+```
+
+**4. Run it.**
+
+```bash
+python web/app.py     # http://localhost:8000 — map, prices, telehealth
+python cli.py         # terminal
+```
+
+**5. Destroy the endpoint when you are done.** It bills while it exists.
+
+```bash
+gcloud ai endpoints delete ENDPOINT_ID --region=us-central1
+```
+
+### Evaluation
+
+```bash
+python run_cycle.py --dry-run          # prints the model-call count, spends nothing
+python run_cycle.py --cycles 2         # full pipeline over 20 cases, needs an endpoint
+python demo/capture.py                 # Playwright screenshots against localhost
+```
+
+`--dry-run` exists because every other command in this section bills.
 
 ## Repository
 
